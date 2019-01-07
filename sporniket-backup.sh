@@ -6,11 +6,11 @@
 #
 # $1 : path of the folder storing the backups
 
-
-FOLDER_CONFIG="$HOME/.sporny-backup"
+FOLDERNAME_CONFIG=".sporny-backup"
+FOLDER_CONFIG="$HOME/$FOLDERNAME_CONFIG"
 FOLDER_TARGET="$1"
 
-FILE_TARGET="$FOLDER_TARGET/sporny-backup--$(date +%Y%m%d-%H%M%S)"
+FILENAME_TARGET="$FOLDER_TARGET/sporny-backup--$(date +%Y%m%d-%H%M%S)"
 FILE_FILESPECS="$FOLDER_CONFIG/files"
 FILE_FOLDERSPECS="$FOLDER_CONFIG/folders"
 
@@ -44,7 +44,7 @@ fi
 # OK, proceed
 cd $HOME
 
-FILE_UNARC="$FILE_TARGET.tar"
+FILE_UNARC="$FILENAME_TARGET.tar"
 FILE_ARC="$FILE_UNARC.gz"
 
 echo -e "$MARKER_INFO adding individual files..."
@@ -59,6 +59,9 @@ for fich in $(cat $FILE_FOLDERSPECS); do
   echo -e "$MARKER_INFO adding $fich..."
   tar -rvf $FILE_UNARC $fich
 done
+
+echo -e "$MARKER_INFO adding backup configuration..."
+tar -rvf $FILE_UNARC $FOLDERNAME_CONFIG
 
 echo -e "$MARKER_INFO compressing $FILE_UNARC to $FILE_ARC..."
 gzip $FILE_UNARC
